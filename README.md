@@ -115,12 +115,14 @@ If a model of a given name and version already exists when training, that model 
 
 ## Training and Testing
 
-For each run, 2 epochs were run per optimization step, and the subsequent loss and validation scores were recorded for each epoch. We trained our U-Net from scratch with a weighted categorical cross-entropy loss function. As is common practice with these algorithms, we used stochastic gradient descent (SGD) with momentum as our optimizer. Each iteration of the SGD algorithm attempts to minimize the loss function through adjusting the model’s parameters to move in the direction of the steepest slope (as defined by the negative of the gradient), taking the loss function closer to some local minima. SGD performs these updates via back propagation. Each gradient descent step is performed after a given batch size of samples, which was 128 in our case. The learning rate of the SGD algorithm controls how much the parameters of a CNN are changed for each iteration. While a high learning rate can cause SGD to skip past the local minima, small learning rates will reach the local minima, thought it can take long periods of time to do so. To balance accuracy and time, our model uses a learning rate of .01.
+We trained our U-Net from scratch with a weighted Dice-coefficient loss function and an 'Adam' optimizer. The model was training 30 epochs at a time, with a batch size of 32 samples and a 75/25 training/validation split. The learning rate controls how much the parameters of a U-Net are changed for each iteration, so to balance accuracy and time, our model uses a learning rate of .0001. Layers of the U-Net used the rectified linear unit (ReLU) activation function, with the final output layer using the SoftMax function.
 
-The model was trained on 40 patients at a time, which was repeated five times for a total of 200 examples. The trained model was subsequently tested on the remaining 20 files (90/10 test/train split) that were not trained on. Models were primarily evaluated based on the dice (F1) score (the harmonic mean of sensitvity and precision), as is standard for BRATS competition data. Separate dice scores can be generated for the whole tumor, the enhancing tumor and the core. Sensitivity and specificity are also calculated for each class. Definitions of metrics are shown below:
+The model was trained on 40 patients at a time, which was repeated five times for a total of 200 training examples. The trained model was subsequently tested on the remaining 20 files (90/10 test/train split) that were not trained on. Models were primarily evaluated based on the dice (F1) score (the harmonic mean of sensitvity and precision), as is standard for BRATS competition data. Separate Dice coefficients can be generated for the whole tumor, the enhancing tumor and the core. Sensitivity and specificity were also calculated for each class. Definitions of these metrics are shown below:
 
-Dice Score (X,Y) = (2*|X ∩ Y|)/|X|+|Y|
+Dice Coefficient (X,Y) = (2*|X ∩ Y|)/|X|+|Y|
+
 Sensitivity Score (X,Y): |Xp ∩ Yp|/Yp
+
 Specificity Score (X,Y): |Xn ∩ Yn|/Yn
 
 where X is defined as all of our model’s tissue class predictions and Y as the ground truth labels, with Xp and Yp representing positive predictions, and Xn and Yn representing negative predictions. Thus, the calculated dice score gives us an overall picture of how accurate our class predictions are, while sensitivity and specificity can be used to ascertain whether certain tissue labels are being overpredicted or underpredicted by our model.
