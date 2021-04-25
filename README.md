@@ -112,16 +112,14 @@ If a model of a given name and version already exists when training, that model 
 * `start` : The start index of the patient to test on
 * `end` : The end index of the patient to test on
 
-## Dataset
 
-The MRI data used to train this model was provided by the [2015 MICCAI BRaTS Challenge](http://www.braintumorsegmentation.org) 
+## Training and Testing
+Data was trained 40 patients at a time for 5 times. The trained model was subsequently tested on the remaining 20 files that were not trained on (testing set). Models were evaluated based on the Dice (F1) Score (the harmonic mean of recall and precision). A separate dice score can be generated for each class.
 
-## Training
-
-## Testing
 
 ## Results
 
+Results on each of the 20 test set files are shown in the table below. Averages are presented in the bottom row.
 
 
 
